@@ -11,6 +11,7 @@ document.addEventListener("click", event => {
   const dest = new URL(link.href);
   if (dest.origin !== location.origin || dest.hash || dest.pathname === location.pathname) return;
   event.preventDefault();
+  if (document.documentElement.classList.contains("depart")) return;
   document.documentElement.classList.add("depart");
   setTimeout(() => location.assign(dest.href), 225);
 });
@@ -45,7 +46,7 @@ if ("IntersectionObserver" in window && !reduced.matches) {
       }
     }
   }, {threshold: .12});
-  document.querySelectorAll(".tile,.steps article").forEach(item => observer.observe(item));
+  document.querySelectorAll(".tile,.steps article,.goal-card").forEach(item => observer.observe(item));
 }
 
 const heroFilm = document.querySelector(".hero-film video");
