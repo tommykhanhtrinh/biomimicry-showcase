@@ -7,6 +7,15 @@ if (legacy.startsWith("du-an/") && oldRoutes.includes(legacy.slice(6))) location
 
 document.addEventListener("click", event => {
   const link = event.target.closest("a");
+  if (link?.matches('header nav a[aria-current="page"]') && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+    // The active project tab also appears on project detail pages. Keep that navigation.
+    const canonical = path => path.replace(/index\.html$/, "");
+    if (canonical(new URL(link.href).pathname) === canonical(location.pathname)) {
+      event.preventDefault();
+      window.scrollTo({top: 0, behavior: reduced.matches ? "instant" : "smooth"});
+      return;
+    }
+  }
   if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target || reduced.matches) return;
   const dest = new URL(link.href);
   if (dest.origin !== location.origin || dest.hash || dest.pathname === location.pathname) return;
