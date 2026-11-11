@@ -1,0 +1,42 @@
+/* Keyboard focus receives the same emphasis as a mouse hover. */
+:where(.button,.source,.discovery a,.field-side a,.tile,.textlink,.case-view,.case-picker label,.goal-card summary,.seed-grid summary) {
+  transition:transform .22s ease,box-shadow .22s ease,background-color .22s ease,color .22s ease,filter .22s ease;
+}
+:where(.button,.source,.discovery a,.field-side a,.tile,.textlink,.case-view,summary):focus-visible {
+  outline:3px solid #b98424;
+  outline-offset:5px;
+}
+.button:focus-visible {box-shadow:0 0 0 5px #e9cc6a66}
+@media(hover:hover) and (pointer:fine) {
+  /* The header footprint stays fixed, including during a hover. */
+  header .bar>nav a::before {transition:box-shadow .2s,filter .2s}
+  header .bar>nav a:hover::before,header .bar>nav a:focus-visible::before {
+    box-shadow:2px 3px 0 #294637,0 0 0 4px #f4da8c99,0 5px 17px #5c774833;
+    filter:saturate(1.3) brightness(1.05);
+  }
+  header .bar>.source:hover,header .bar>.source:focus-visible {
+    box-shadow:3px 4px 0 #284637,0 0 0 4px #cde97877,0 4px 20px #8fbc4b66;
+    filter:saturate(1.15);
+  }
+  .source-arrow {transition:transform .2s,background-color .2s}
+  .source:hover .source-arrow {transform:rotate(8deg) scale(1.12);background:#52702b}
+  .button:hover {transform:translateY(-3px) scale(1.025);box-shadow:0 7px 0 #163b2330,0 11px 24px #24472d24;background:#426637}
+  .button:active {transform:translateY(0) scale(.99);box-shadow:none}
+  .discovery a:hover,.field-side a:hover {transform:translateY(-4px) scale(1.02);box-shadow:0 8px 19px #284b3326;filter:saturate(1.12)}
+  .discovery b,.field-side b {transition:transform .2s,background-color .2s}
+  .discovery a:hover b,.field-side a:hover b {transform:rotate(-8deg) scale(1.12);background:#476c36}
+  .tile:hover {transform:translateY(-4px)}
+  .tile:hover .art {box-shadow:0 0 0 3px #c5df9e,0 12px 24px #233e2729}
+  .cardline>span {transition:transform .2s}
+  .tile:hover .cardline>span {transform:translate(3px,-3px)}
+  .textlink:hover {color:#8d3867;transform:translateY(-2px);text-decoration:underline;text-underline-offset:5px}
+  .case-view:hover {transform:translateY(-4px) scale(1.015);filter:saturate(1.1)}
+  .case-picker label:hover {transform:translateY(-3px);box-shadow:0 4px 0 #28473426;background:#f6d77b;color:#203a2c}
+  .goal-card summary:hover,.seed-grid summary:hover {color:#6f3c67}
+  .goal-card:has(summary:hover),.seed-grid details:has(summary:hover) {box-shadow:0 0 0 3px #d9cf8f,0 8px 15px #1d402516}
+  .goal-card,.seed-grid details {transition:box-shadow .2s}
+  .goal-card summary:hover .goal-toggle {background:#fff9db}
+}
+@media(prefers-reduced-motion:reduce) {
+  :where(.button,.source,.discovery a,.field-side a,.tile,.textlink,.case-view,.case-picker label,.goal-card summary,.seed-grid summary):hover {transform:none}
+}
