@@ -61,10 +61,33 @@ if ("IntersectionObserver" in window && !reduced.matches) {
       }
     }
   }, {threshold: .12});
-  document.querySelectorAll(".tile,.steps article,.goal-card,.atlas,.visitor-guide li").forEach(item => observer.observe(item));
+  document.querySelectorAll(".tile,.steps article,.goal-card,.atlas,.visitor-guide li,.path-stops article,.paper,.seed-grid details").forEach(item => observer.observe(item));
 }
 
 const heroFilm = document.querySelector(".hero-film video");
 if (heroFilm && !reduced.matches) {
   heroFilm.play().catch(() => { /* Playback remains available through the native controls. */ });
 }
+
+
+// A soft spotlight follows the mouse without intercepting page controls.
+const glow = document.createElement("div");
+glow.className = "pointer-glow";
+glow.setAttribute("aria-hidden", "true");
+document.body.append(glow);
+let glowFrame = 0;
+let glowX = 0;
+let glowY = 0;
+document.addEventListener("pointermove", event => {
+  if (event.pointerType !== "mouse" || !finePointer.matches || reduced.matches) return;
+  glowX = event.clientX;
+  glowY = event.clientY;
+  glow.classList.add("visible");
+  if (glowFrame) return;
+  glowFrame = requestAnimationFrame(() => {
+    glow.style.transform = `translate(${glowX}px, ${glowY}px)`;
+    glowFrame = 0;
+  });
+}, { passive: true });
+document.documentElement.addEventListener("pointerleave", () => glow.classList.remove("visible"));
+reduced.addEventListener("change", () => glow.classList.remove("visible"));
