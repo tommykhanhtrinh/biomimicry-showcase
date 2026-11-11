@@ -91,3 +91,16 @@ document.addEventListener("pointermove", event => {
 }, { passive: true });
 document.documentElement.addEventListener("pointerleave", () => glow.classList.remove("visible"));
 reduced.addEventListener("change", () => glow.classList.remove("visible"));
+
+
+// Anchor destinations stay below the sticky header at every screen size.
+const stickyHeader = document.querySelector("header");
+const updateHeaderOffset = () => {
+  document.documentElement.style.setProperty("--header-offset", stickyHeader.offsetHeight + 18 + "px");
+};
+updateHeaderOffset();
+if ("ResizeObserver" in window) {
+  new ResizeObserver(updateHeaderOffset).observe(stickyHeader);
+} else {
+  addEventListener("resize", updateHeaderOffset, { passive: true });
+}
