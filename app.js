@@ -47,3 +47,8 @@ if ("IntersectionObserver" in window && !reduced.matches) {
   }, {threshold: .12});
   document.querySelectorAll(".tile,.steps article").forEach(item => observer.observe(item));
 }
+
+const heroFilm = document.querySelector(".hero-film video");
+if (heroFilm && !reduced.matches) {
+  heroFilm.play().catch(() => { /* Playback remains available through the native controls. */ });
+}
