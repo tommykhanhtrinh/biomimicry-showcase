@@ -1,79 +1,49 @@
-const projects = [
-  {
-    slug: "rainloop", name: "RainLoop", summary: "Thu và tái sử dụng nước mưa trong sân trường.",
-    story: "Lấy cảm hứng từ đất ngập nước, RainLoop đề xuất thu nước mưa, lọc sơ bộ, trữ tạm rồi dẫn nước đến vùng rễ cây.",
-    url: "https://tommykhanhtrinh.github.io/rain-loop-website/index.html"
-  },
-  {
-    slug: "pomsole", name: "PomSole", summary: "Từ cấu trúc vỏ bưởi đến thiết kế đế giày.",
-    story: "PomSole khám phá cách vận dụng cấu trúc của vỏ bưởi vào đế giày. Trang sản phẩm trưng bày ba mẫu để người xem lật thẻ và khám phá từng thiết kế.",
-    url: "https://keen-lokum-f9eccd.netlify.app/san-pham"
-  },
-  {
-    slug: "biomimicry-journal", name: "Biomimicry Journal", summary: "Nhật ký quan sát sinh vật và phát triển ý tưởng.",
-    story: "Bắt đầu từ những quan sát về hải ly, cuốn nhật ký dẫn người xem qua các thẻ phỏng sinh học, bảng cảm hứng và quá trình hình thành ý tưởng thiết kế.",
-    url: "https://lstsict2526.my.canva.site/gk/biomimicry-journal"
-  },
-  {
-    slug: "mang-luoi-nhen", name: "Hệ thống Mạng Lưới Nhện", summary: "Ý tưởng lưới chắn rác trên sông Sài Gòn.",
-    story: "Nhóm đề xuất hệ thống lưới chắn rác thông minh lấy cảm hứng từ mạng nhện. Website dự án mở đầu bằng màn hình đăng nhập để truy cập hệ thống.",
-    url: "https://luoiracweb.oneapp.dev/"
-  },
-  {
-    slug: "toucan-boucan", name: "Toucan Boucan", summary: "Bao bì bảo vệ hàng hóa lấy cảm hứng từ mỏ chim.",
-    story: "Dự án TB Protect tìm hiểu cấu trúc nhẹ của mỏ chim toucan và vận dụng nguyên lý này vào thiết kế bao bì nhiều lớp bảo vệ hàng hóa.",
-    url: "https://toucan-boucan.minh-nguyen1.workers.dev/"
-  }
-];
-const cards = document.querySelector("#cards");
-const detail = document.querySelector("#detail");
-const home = document.querySelector("#home");
-const ring = document.querySelector("#cursor");
-const motion = matchMedia("(prefers-reduced-motion: reduce)");
-function preview(project, index) {
-  return '<div class="art"><img src="assets/' + (index + 1) + '.jpg" alt="Giao diện ' + project.name + '"></div>';
-}
-cards.innerHTML = projects.map((p, i) => `
-  <a class="tile" href="#du-an/${p.slug}">
-    ${preview(p, i)}
-    <div class="cardline"><h3>${p.name}</h3><span aria-hidden="true">↗</span></div>
-    <p>${p.summary}</p>
-  </a>`).join("");
-let lastProject = "";
-function render() {
-  const route = location.hash.slice(1) || "trang-chu";
-  const index = projects.findIndex(p => route === "du-an/" + p.slug);
-  const p = projects[index];
-  ring.classList.remove("show");
-  detail.hidden = !p;
-  home.hidden = Boolean(p);
-  document.title = (p ? p.name : "Triển lãm phỏng sinh học") + " · Nếp Tự Nhiên";
-  for (const link of document.querySelectorAll("nav a")) {
-    if (link.hash === "#" + (p ? "du-an" : route)) link.setAttribute("aria-current", "location");
-    else link.removeAttribute("aria-current");
-  }
-  if (p) {
-    detail.innerHTML = `<a class="back" href="#du-an">← Bộ sưu tập dự án</a><h1 tabindex="-1">${p.name}</h1><p>${p.story}</p><a class="button" href="${p.url}" target="_blank" rel="noopener">Trải nghiệm website <span>↗</span></a>${preview(p, index)}`;
-    detail.querySelector("h1").focus({preventScroll:true});
-    window.scrollTo({top:0, behavior:"instant"});
-    if (!motion.matches) detail.animate([{opacity:0,transform:"translateY(14px)"},{opacity:1,transform:"none"}],{duration:350});
-    lastProject = p.slug;
-  } else {
-    const section = document.getElementById(route);
-    if (lastProject && route === "du-an") {
-      cards.querySelector('[href="#du-an/' + lastProject + '"]').focus({preventScroll:true});
-    }
-    if (section && location.hash) section.scrollIntoView({behavior:lastProject || motion.matches ? "instant" : "smooth"});
-    if(lastProject && !motion.matches) home.animate([{opacity:.3},{opacity:1}],{duration:300});
-    lastProject = "";
-  }
-}
-addEventListener("hashchange", render);
-render();
-if (matchMedia("(pointer:fine) and (hover:hover)").matches) {
-  cards.addEventListener("pointermove", event => {
-    ring.classList.toggle("show", !motion.matches && Boolean(event.target.closest(".art")));
-    ring.style.transform = `translate(${event.clientX+13}px,${event.clientY+13}px)`;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
+const legacy = location.hash.slice(1);
+const oldRoutes = ["rainloop", "pomsole", "biomimicry-journal", "mang-luoi-nhen", "toucan-boucan"];
+if (["du-an", "mon-hoc"].includes(legacy)) location.replace(legacy + ".html");
+if (legacy.startsWith("du-an/") && oldRoutes.includes(legacy.slice(6))) location.replace(legacy.slice(6) + ".html");
+
+document.addEventListener("click", event => {
+  const link = event.target.closest("a");
+  if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.target || reduced.matches) return;
+  const dest = new URL(link.href);
+  if (dest.origin !== location.origin || dest.hash || dest.pathname === location.pathname) return;
+  event.preventDefault();
+  document.documentElement.classList.add("depart");
+  setTimeout(() => location.assign(dest.href), 225);
+});
+addEventListener("pageshow", () => document.documentElement.classList.remove("depart"));
+
+const cursor = document.querySelector("#cursor");
+if (finePointer.matches) {
+  document.addEventListener("pointermove", event => {
+    const visible = !reduced.matches && Boolean(event.target.closest(".tile .art"));
+    cursor.classList.toggle("show", visible);
+    if (visible) cursor.style.transform = `translate(${event.clientX + 12}px, ${event.clientY + 12}px)`;
   });
-  cards.addEventListener("pointerleave", () => ring.classList.remove("show"));
+  document.documentElement.addEventListener("pointerleave", () => cursor.classList.remove("show"));
+  const hero = document.querySelector(".hero-photo");
+  hero?.addEventListener("pointermove", event => {
+    if (reduced.matches) return;
+    const box = hero.getBoundingClientRect();
+    hero.style.setProperty("--mx", (event.clientX - box.left - box.width / 2) / box.width * 12 + "px");
+    hero.style.setProperty("--my", (event.clientY - box.top - box.height / 2) / box.height * 10 + "px");
+  });
+  hero?.addEventListener("pointerleave", () => {
+    hero.style.removeProperty("--mx");
+    hero.style.removeProperty("--my");
+  });
+}
+if ("IntersectionObserver" in window && !reduced.matches) {
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("reveal");
+        observer.unobserve(entry.target);
+      }
+    }
+  }, {threshold: .12});
+  document.querySelectorAll(".tile,.steps article").forEach(item => observer.observe(item));
 }
