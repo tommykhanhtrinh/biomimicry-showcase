@@ -104,3 +104,18 @@ if ("ResizeObserver" in window) {
 } else {
   addEventListener("resize", updateHeaderOffset, { passive: true });
 }
+
+// Illuminate a card at the pointer position without moving its contents.
+let cardLightFrame = 0;
+document.addEventListener("pointermove", event => {
+  if (!finePointer.matches || reduced.matches || event.pointerType !== "mouse" || cardLightFrame) return;
+  const card = event.target.closest(".discovery a,.paper");
+  if (!card) return;
+  const { clientX, clientY } = event;
+  cardLightFrame = requestAnimationFrame(() => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--light-x", clientX - rect.left + "px");
+    card.style.setProperty("--light-y", clientY - rect.top + "px");
+    cardLightFrame = 0;
+  });
+}, { passive: true });

@@ -1,0 +1,48 @@
+/* Exhibit tickets, specimen labels and pinned field notes. */
+.discovery {gap:16px}
+.discovery a {
+  isolation:isolate;overflow:hidden;
+  min-height:150px;padding:19px 21px 20px;
+  border:1.5px solid #34543c;
+  box-shadow:4px 5px 0 #27452f;
+}
+.discovery .collection-door {
+  border-radius:7px 7px 21px 7px;
+  background:radial-gradient(circle at 0 73%,#edefe2 0 6px,transparent 7px),radial-gradient(circle at 100% 73%,#edefe2 0 6px,transparent 7px),linear-gradient(120deg,#ffdf6a,#efb838);
+}
+.collection-door strong {font-size:57px;line-height:1}
+.discovery .collection-door span {border-top:1px dashed #70532388;padding-top:13px;margin-top:6px;font-weight:600}
+.discovery .course-door {
+  border-radius:8px 42px 8px 23px;
+  background:repeating-linear-gradient(130deg,transparent 0 29px,#346c3610 30px 31px),linear-gradient(135deg,#c0e8b4,#80cea6);
+}
+.discovery .course-door>span {font-family:'Unbounded Variable',sans-serif;font-size:9px;line-height:1.5;max-width:19ch;position:relative;z-index:1}
+.discovery .course-door strong {font-size:27px;margin-top:8px;position:relative;z-index:1}
+.discovery b {right:12px;bottom:12px;width:30px;height:30px}
+.discovery a::after,.paper::after {
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(170px circle at var(--light-x,20%) var(--light-y,0%),#fff9cf99,transparent 76%);
+  opacity:0;transition:opacity .25s;
+}
+.discovery a:hover::after,.discovery a:focus-visible::after,.paper:hover::after {opacity:1}
+.case-sheet {border:1px solid #637b5a;border-radius:12px 46px 12px 25px;box-shadow:5px 6px 0 #3d513218}
+.case-origin {display:inline-block;padding:5px 10px;border:1px dashed #5b7950;border-radius:5px;background:#fffff966;transform:rotate(-1deg)}
+.case-view {padding:8px 8px 26px;background:#fffdf4;border-radius:3px;box-shadow:4px 5px 0 #34523c25;display:block}
+.case-view img {border-radius:2px;box-shadow:none}
+.tile .art {padding:7px;border:1px solid #839275;background:#f2f0dc;border-radius:5px 26px 5px 17px;box-shadow:4px 5px 0 #35503922}
+.tile .art img {inset:7px;width:calc(100% - 14px);height:calc(100% - 14px);border-radius:3px 19px 3px 11px}
+.paper {border-radius:3px 3px 23px 3px;border-bottom-width:3px;padding-top:25px}
+.paper::before {width:62px;height:16px;top:-7px;left:calc(50% - 31px);box-shadow:0 1px 3px #28391c11}
+.goal-card,.seed-grid details {border:1.5px solid #617654;border-radius:7px 30px 7px 22px;box-shadow:4px 5px 0 #38533122}
+.goal-card .goal-no {background:#fffdf1a6;border:1px dashed currentColor;border-radius:50%;width:39px;height:39px;display:grid;place-items:center;font-size:21px}
+.seed-grid details {position:relative;background-image:radial-gradient(circle at 100% 0,#fff9 0 15px,transparent 16px)}
+.seed-grid details[open] {box-shadow:4px 7px 0 #38533133}
+.field-note {border:1.5px solid #4a6d4b;border-radius:8px 33px 8px 22px!important;background-image:repeating-linear-gradient(140deg,transparent 0 30px,#3e693615 31px 32px)}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .discovery a:hover {transform:translateY(-5px);box-shadow:5px 9px 0 #27452f}
+  .paper {transition:transform .25s,box-shadow .25s}
+  .paper:hover {transform:translateY(-4px) rotate(.6deg);box-shadow:7px 10px 0 #31463022}
+  .seed-grid summary:hover .goal-toggle {transform:scale(1.1)}
+}
+@media(max-width:850px){.discovery a{padding:15px;min-height:148px}.discovery .course-door strong{font-size:24px}}
+@media(max-width:420px){.discovery{gap:11px}.discovery a{padding:13px;min-height:146px}.discovery .course-door strong{font-size:22px}.collection-door strong{font-size:47px}.collection-door span{font-size:12px}}
